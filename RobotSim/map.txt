@@ -1,0 +1,19 @@
+# Text file
+
+# --- Robot Simulation Map File ---
+# This file configures the world for our simulation.
+# Blank lines and lines starting with # are ignored.
+
+# Format: keyword value1 value2 ...
+
+# World size
+size 100.0 100.0
+
+# Start and Goal positions
+start 10.0 50.0
+goal  80.0 50.0
+
+# Obstacles (x, y, width, height)
+# You can add as many obstacle lines as you want.
+obstacle 30.0 30.0 20.0 40.0
+obstacle 60.0 10.0 15.0 25.0
