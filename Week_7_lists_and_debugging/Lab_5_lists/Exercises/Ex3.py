@@ -3,20 +3,27 @@
 Exercise 3
 ================
 
-1. Given two lists, write some code that will create a new list containing the higher element from each pair of elements in the two lists.
-For example, if we have the lists:
-list1 = [1, 4, 9]
-list2 = [1, 8, 27]
-Then our code should create a new list:
-higher_elements = [1, 8, 27]        
+Fix this code
+
+The function should return the neighbouring values around a chosen index in a list: the previous value, the current value, and the next value.
+
+If the index is the last in the sequence, the next value should be the first in the sequence. 
+
+If the index is the first in the sequence, the previous value should be the last in the sequence. 
+
+Fix the function so that it can handle boundary index values (index=0 and index=4) and intermediate index values (e.g. index=2) correctly.  
 '''
 
-list1 = [2, 5, 7, 1, 10, 14, 16, 1, 34, 8]
-list2 = [6, 3, 27, 3, 9, 12, 15, 2, 30, 5]
-higher_elements = []
+def get_neighbours(values, index):
+    previous = values[index - 1]
+    current = values[index]
+    next = values[index + 1]
 
-'''
-2. Modify your code (if necessary) to work with *any* number of lists. 
-For example, if we input three lists your code should create a new list containing the highest element at each index in the three lists.
-If we input four lists, your code should create a new list containing the highest element at each index in the four lists, and so on. 
-'''
+    return [previous, current, next]
+
+
+numbers = [10, 20, 30, 40, 50]
+
+# Testing function for intermediate index 2
+result = get_neighbours(numbers, 2)
+print(result)
