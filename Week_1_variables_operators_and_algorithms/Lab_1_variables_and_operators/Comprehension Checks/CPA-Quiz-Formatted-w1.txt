@@ -106,114 +106,9 @@ c. True
 d. boolean
 
 Type: MC
-Title: String Indexing (Positive)
-Randomize
-8.
-What is the output of the following code?
-[HTML]<pre><code>
-message = "Hello!"<br>
-<br>
-print(message[1])<br>
-</code></pre>[/HTML]
-*a. e
-b. H
-c. l
-d. Error
-
-Type: MC
-Title: String Indexing (Negative)
-Randomize
-9.
-What is the output of the following code?
-[HTML]<pre><code>
-message = "Hello!"<br>
-print(message[-1])<br>
-</code></pre>[/HTML]
-*a. !
-b. o
-c. H
-d. Error
-
-Type: MC
-Title: String Slicing (Explicit Start and End)
-Randomize
-10.
-What is the output of the following code?
-[HTML]<pre><code>
-message = "Hello!"<br>
-print(message[0:3])<br>
-</code></pre>[/HTML]
-*a. Hel
-b. Hell
-c. He
-d. el
-
-Type: MC
-Title: String Slicing (Implicit Start)
-Randomize
-11.
-What is the output of the following code?
-[HTML]<pre><code>
-message = "Hello!"<br>
-<br>
-print(message[:3])<br>
-</code></pre>[/HTML]
-*a. Hel
-b. H
-c. Hell
-d. Error
-
-Type: MC
-Title: String Slicing (Negative Start)
-Randomize
-12.
-What is the output of the following code?
-[HTML]<pre><code>
-message = "Hello!"<br>
-<br>
-print(message[-3:])<br>
-</code></pre>[/HTML]
-*a. lo!
-b. llo
-c. o!
-d. el
-
-Type: MC
-Title: String Method (upper)
-Randomize
-13.
-What is the output of the following code?
-[HTML]<pre><code>
-message = "geoff"<br>
-message_changed = message.upper()<br>
-<br>
-print(message_changed)<br>
-</code></pre>[/HTML]
-*a. GEOFF
-b. geoff
-c. Geoff
-d. Error
-
-Type: MC
-Title: String Method (find)
-Randomize
-14.
-What is the output of the following code?
-[HTML]<pre><code>
-message = "Hello!"<br>
-character = message.find('l')<br>
-<br>
-print(character)<br>
-</code></pre>[/HTML]
-*a. 2
-b. 3
-c. l
-d. 4
-
-Type: MC
 Title: Modulo Operator
 Randomize
-15.
+8.
 What is the output of the following code?
 [HTML]<pre><code>
 a = 12<br>
@@ -230,7 +125,7 @@ d. 1
 Type: MC
 Title: Floor Division and Multiplication
 Randomize
-16.
+9.
 What is the output of the following code?
 [HTML]<pre><code>
 x = 10<br>
@@ -247,7 +142,7 @@ d. 3
 Type: MC
 Title: Area and Perimeter Calculation
 Randomize
-17.
+10.
 What is the output of the following code?
 [HTML]<pre><code>
 length = 5<br>
@@ -265,7 +160,7 @@ d. 23
 Type: MC
 Title: Type Conversion (Float to Int)
 Randomize
-18.
+11.
 What is the output of the following code?
 [HTML]<pre><code>
 p = 10<br>
@@ -282,7 +177,7 @@ d. Error
 Type: MC
 Title: Subtraction Assignment Operator
 Randomize
-19.
+12.
 What is the output of the following code?
 [HTML]<pre><code>
 a = 10<br>
@@ -298,7 +193,7 @@ d. 15
 Type: MC
 Title: Modulo Assignment Operator
 Randomize
-20.
+13.
 What is the output of the following code?
 [HTML]<pre><code>
 a = 7<br>
@@ -314,7 +209,7 @@ d. 0
 Type: MC
 Title: Floor Division Assignment Operator
 Randomize
-21.
+14.
 What is the output of the following code?
 [HTML]<pre><code>
 a = 15<br>
@@ -330,7 +225,7 @@ d. 11
 Type: MC
 Title: Multiplication Assignment with Operator Precedence
 Randomize
-22.
+15.
 What is the output of the following code?
 [HTML]<pre><code>
 a = 2<br>
