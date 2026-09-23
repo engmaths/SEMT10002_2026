@@ -45,3 +45,11 @@ robot_radius_in     = 3.248   # radius of the robot body
 #   - store the robot radius, wheel separation and wheel radius in millimetres
 #   - store the current position and orientation (x = 0 mm, y = 0 mm,
 #     theta = 0 rad)
+
+robot_name = "Robby"
+robot_radius_mm = robot_radius_in * 25.4
+wheel_separation_mm = wheel_separation_in * 25.4
+
+print(robot_name)
+print(robot_radius_mm)
+print(wheel_separation_mm)
