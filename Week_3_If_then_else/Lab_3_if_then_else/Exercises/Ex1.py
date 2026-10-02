@@ -29,6 +29,7 @@ circle3_radius = 3
 def is_inside_circles(x, y):
 
     'Put your code here'
+    return None
 
 
 #Dont change these -- just run them and use them to check your code is correct.
@@ -54,3 +55,8 @@ if is_inside_circles(-3, 1) == "1, 3":
     print("Test 4 passed")
 else:
     print("Test 4 failed")
+
+if is_inside_circles(-10, -10) == None:
+    print("Test 5 passed")
+else:
+    print("Test 5 failed")

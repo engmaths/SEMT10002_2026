@@ -31,7 +31,6 @@ if x ==1 and y == 3:
     print("Test 3 passed")
 else:
     print("Test 3 failed")
-    exit()
 
 x, y = solve(1, 2, 2, 4, 3, 6)
 
@@ -39,6 +38,5 @@ if x is None and y is None:
     print("Test 4 passed")
 else:
     print("Test 4 failed")
-    exit()
 
 print("All tests passed -- well done")

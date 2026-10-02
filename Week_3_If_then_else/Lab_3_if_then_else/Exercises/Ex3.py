@@ -11,9 +11,13 @@ A sensor returns `True` if it is over a line and `False` otherwise.  The useful 
 | True | False | False | Line is far to my left: slow and turn left |
 | False | False | True | Line is far to my right: slow and turn right |
 
+We'd like you to write some code to tell the robot what to do for a certain sensor reading. 
+Your function should take the three sensor readings as input and return a string telling the robot what to do.
+
 We've included some test functions to check whether your code is correct. But these don't cover all examples. 
-1. Add additional test functions to cover all the cases. 
-2. Write the function follow_line(left_sensor, middle_sensor, right_sensor) such that it passes all tests.
+You should: 
+    1. Add additional test functions to cover all the cases. 
+    2. Write the function follow_line(left_sensor, middle_sensor, right_sensor) such that it passes all tests.
 '''
 
 # Complete this function *after* you've added test functions. 
