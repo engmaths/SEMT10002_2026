@@ -61,12 +61,12 @@ def run(program, registers, max_steps=10000):
         # fetch the next instruction
         instruction = program[pc]
         # decode the instruction
-        op = instruction[0]
+        print(instruction[0])
 
-        if op == 'halt':
+        if instruction[0] == 'halt':
             break
 
-        elif op == 'inc':
+        if instruction[0] == 'inc':
             # get the target register
             register = instruction[1]
             # add one to it
@@ -90,7 +90,7 @@ def run(program, registers, max_steps=10000):
                 pc += 1
 
         else:
-            raise ValueError('unknown instruction: ' + str(op))
+            raise ValueError('unknown instruction: ' + str(instruction[0]))
 
     return registers
 
