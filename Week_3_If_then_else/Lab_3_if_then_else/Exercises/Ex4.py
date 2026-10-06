@@ -57,12 +57,12 @@ print(robot_motion(2, 2, wheel_radius_mm, wheel_separation_mm))
 print(robot_motion(-2, 2, wheel_radius_mm, wheel_separation_mm))
 
 WORLD_X_MIN = 0.0
-WORLD_X_MAX = 100.0
+WORLD_X_MAX = 1000.0
 WORLD_Y_MIN = 0.0
-WORLD_Y_MAX = 100.0
+WORLD_Y_MAX = 1000.0
 
-OBSTACLE_CENTRE_X = 50.0
-OBSTACLE_CENTRE_Y = 50.0
+OBSTACLE_CENTRE_X = 500.0
+OBSTACLE_CENTRE_Y = 500.0
 OBSTACLE_RADIUS = 5
 
 def is_inside_arena(x, y):
@@ -74,19 +74,19 @@ def has_collided(x, y):
     pass
 
 # Robot well inside the arena -- should be inside
-if is_inside_arena(50, 50) == True:
+if is_inside_arena(500, 500) == True:
     print("Test 1 passed")
 else:
     print("Test 1 failed")
 
-# Centre is in-bounds (x=2) but the robot's body pokes through the left wall -- NOT inside
-if is_inside_arena(2, 50) == False:
+# Centre is in-bounds (x=20) but the robot's body pokes through the left wall -- NOT inside
+if is_inside_arena(20, 500) == False:
     print("Test 2 passed")
 else:
     print("Test 2 failed")
 
 # Centre well beyond the wall -- not inside
-if is_inside_arena(110, 50) == False:
+if is_inside_arena(1100, 500) == False:
     print("Test 3 passed")
 else:
     print("Test 3 failed")
@@ -94,19 +94,19 @@ else:
 # --- has_collided ---
 
 # Robot sitting right on the obstacle -- collision
-if has_collided(50, 50) == True:
+if has_collided(500, 500) == True:
     print("Test 4 passed")
 else:
     print("Test 4 failed")
 
 # Centre is 8 away (outside the obstacle) but the robot's radius still reaches it -- collision
-if has_collided(58, 50) == True:
+if has_collided(520, 500) == True:
     print("Test 5 passed")
 else:
     print("Test 5 failed")
 
 # Far from the obstacle -- no collision
-if has_collided(10, 10) == False:
+if has_collided(100, 100) == False:
     print("Test 6 passed")
 else:
     print("Test 6 failed")

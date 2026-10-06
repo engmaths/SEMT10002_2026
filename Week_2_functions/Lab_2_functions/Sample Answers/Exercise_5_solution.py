@@ -61,12 +61,12 @@ def run(program, registers, max_steps=10000):
         # fetch the next instruction
         instruction = program[pc]
         # decode the instruction
-        op = instruction[0]
+        print(instruction[0])
 
-        if op == 'halt':
+        if instruction[0] == 'halt':
             break
 
-        elif op == 'inc':
+        elif instruction[0] == 'inc':
             # get the target register
             register = instruction[1]
             # add one to it
@@ -74,15 +74,15 @@ def run(program, registers, max_steps=10000):
             # move to the next line
             pc += 1
 
-        if instruction[0] == 'dec':
+        elif instruction[0] == 'dec':
             register = instruction[1]
             registers[register] = registers[register] - 1
             pc +=1
 
-        if instruction[0] == 'jmp':
+        elif instruction[0] == 'jmp':
             pc = instruction[1]
 
-        if instruction[0] == 'jz':
+        elif instruction[0] == 'jz':
             register = instruction[1]
             if registers[register] == 0:
                 pc = instruction[2]
@@ -90,7 +90,7 @@ def run(program, registers, max_steps=10000):
                 pc += 1
 
         else:
-            raise ValueError('unknown instruction: ' + str(op))
+            raise ValueError('unknown instruction: ' + str(instruction[0]))
 
     return registers
 
@@ -124,7 +124,7 @@ print(run(P_add, registers))
 # =============================================================
 
 P_subtract = [
-    ('jz', 1, 4)
+    ('jz', 1, 4),
     ('dec', 0), 
     ('dec', 1), 
     ('jmp', 0), 
