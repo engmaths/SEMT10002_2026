@@ -9,6 +9,7 @@ We can use Python to explore this question numerically, seeing that at least for
 
 Write some code that counts the number of steps it takes a given starting number to reach one.
 Then write some additional code to see which starting number under 1000 takes the most steps to reach 1. 
+Please use functions to write this code!
 '''
 
 # write your code here

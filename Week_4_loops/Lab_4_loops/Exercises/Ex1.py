@@ -10,39 +10,50 @@ You can check your code against the analytical calculation $F = P(1+r)^t$.
 '''
 
 def calculate_interest(initial_deposit, interest_rate, time):
-    pass #Write your code here
+    #Write your code here
+    return -999
 
 def test_calculate_interest():
 
-    initial = 100
+    initial = 20000
     interest_rate = 0.5
     time = 5
-    if calculate_interest(initial, interest_rate, time) != initial * (1+interest_rate)**time:
+    analytic_calculation = initial * (1+interest_rate)**time
+    if abs(calculate_interest(initial, interest_rate, time) - analytic_calculation) > 1E-5:
         print("Error! - test 1 fails")
+        return 
 
-    initial = 100
+    initial = 20000
     interest_rate = 0.0
     time = 5
-    if calculate_interest(initial, interest_rate, time) != initial * (1+interest_rate)**time:
+    analytic_calculation = initial * (1+interest_rate)**time
+    if abs(calculate_interest(initial, interest_rate, time) - analytic_calculation) > 1E-5:
         print("Error! - test 2 fails")
+        return 
 
     initial = 0
     interest_rate = 0.1
     time = 15
-    if calculate_interest(initial, interest_rate, time) != initial * (1+interest_rate)**time:
+    analytic_calculation = initial * (1+interest_rate)**time
+    if abs(calculate_interest(initial, interest_rate, time) - analytic_calculation) > 1E-5:
         print("Error! - test 3 fails")
+        return 
 
-    initial = 100
+    initial = 20000
     interest_rate = 0.1
     time = 0
-    if calculate_interest(initial, interest_rate, time) != initial * (1+interest_rate)**time:
+    analytic_calculation = initial * (1+interest_rate)**time
+    if abs(calculate_interest(initial, interest_rate, time) - analytic_calculation) > 1E-5:
         print("Error! - test 4 fails")
+        return
+
+    print("All tests passed")
 
 test_calculate_interest()
 
 '''
 Part 2
-Next, write some code to calculate how long I'd have to leave my money invested before I had £100,000.
+Next, write some code to calculate how many years I'd have to leave my money invested before I had £100,000.
 '''
 
 #Your code goes here
