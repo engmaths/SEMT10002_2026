@@ -63,7 +63,7 @@ WORLD_Y_MAX = 1000.0
 
 OBSTACLE_CENTRE_X = 500.0
 OBSTACLE_CENTRE_Y = 500.0
-OBSTACLE_RADIUS = 5
+OBSTACLE_RADIUS = 50
 
 def is_inside_arena(x, y):
     # Your code here
@@ -99,7 +99,7 @@ if has_collided(500, 500) == True:
 else:
     print("Test 4 failed")
 
-# Centre is 8 away (outside the obstacle) but the robot's radius still reaches it -- collision
+# Centre is 20 away (outside the obstacle) but the robot's radius still reaches it -- collision
 if has_collided(520, 500) == True:
     print("Test 5 passed")
 else:
