@@ -87,6 +87,10 @@ def run(program, registers, max_steps=10000):
 
     return registers
 
+P_add = [('jz', 1, 4), ('inc', 0), ('dec', 1), ('jmp', 0), ('halt')] #This 'program' adds whatever is in register 1 (3) to register 0 (5).
+P_subtract = [('jz', 1, 4), ('dec', 0), ('dec', 1), ('jmp', 0), ('halt',)] #This 'program' subtracts whatever is in register 1 (3) from register (0).
+P_copy = [('jz', 0, 5), ('dec', 0), ('inc', 1), ('inc', 2), , ('jmp', 0), ('jz', 1, 9), ('dec', 1), ('inc', 0), , ('jmp', 5), ('halt',)]
+
 P_multiply = [
     ('set', 1, 6),     #  0   caller: put arguments in r1, r2
     ('set', 2, 7),     #  1
