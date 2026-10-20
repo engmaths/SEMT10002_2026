@@ -1,39 +1,95 @@
-'''
-================
-Exercise 5
-================
+"""
+Build a sorting algorithm, inspired by Timsort, that takes advantage of the fact that real-world data is often already partly sorted
 
-We are going to update the robot program so that the robot has, not just one, but *multiple* obstacles to avoid. 
+Breaking the problem down into steps...
 
-The library robot_plotter.py has been updated...
+Can you:
+- Idenitify the start and end positions of runs of 3 or more ascending values in a list 
+- Use insertion sort to sort the gaps (unordered sections between the runs)
+- When sorting these gaps, can you break them down into sub-sections of data of maximum length 4 (look at how this is done in merge_sort function)
+- Merge increasingly large sections until a single merged list achieved (look at how this is done in merge_sort function) 
 
-The function `show_plot(map_coords, goal=None, obstacle=None, pause=0)` had an optional argument `obstacle`, with format:
-((obstacle_x, obstacle_y), (obstacle_width, obstacle_height))
+Rules
+- Don't use `sorted()`
+- Don't use `.sort()`
+- You may use functions you've written yourself
+- Your algorithm should work for lists of arbitrary length
+"""
 
-Rather than plotting a single obstacle, the function can now plot any number of obstacles. 
-To achieve this, the optional argument, `obstacle`, has been replaced by an optional argument `obstacles` which 
-instead has the format of a list. Examples:
+def insertion_sort(numbers):
+    """
+    Sorts a list of values in ascending order in-place
+    """
+
+    for i in range(1, len(numbers)):
+
+        value = numbers[i] # Store value at current postion in list
+
+        j = i-1            
+
+        # Shift earlier values in the list to the right if they are greater than the stored value
+        while j>=0 and numbers[j]>value:
+            numbers[j+1] = numbers[j]
+            j -= 1
+
+        # When a lower value is reached, insert the stored value after it
+        numbers[j+1] = value
 
 
-1 obstacle
+def merge(left, right):
+    """
+    Returns two already-sorted lists combined as a single sorted list
+    """
 
-[((obstacle_1_x, obstacle_1_y), (obstacle_1_width, obstacle_1_height))]
+    result = []
+    i = 0
+    j = 0
+ 
+    while i < len(left) and j < len(right):
+ 
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+
+        else:
+            result.append(right[j])
+            j += 1
+ 
+    result += left[i:]
+    result += right[j:]
+ 
+    return result
 
 
-2 obstacles
+def mergesort(numbers):
+    """
+    Sorts a list of values in ascending order in-place
+    by sorting sections of data of maximum length 4 using 
+    insertion sort, then merging increasingly large sections until a 
+    single merged list achieved 
+    """
 
-[((obstacle_1_x, obstacle_1_y), (obstacle_1_width, obstacle_1_height)),
- ((obstacle_2_x, obstacle_2_y), (obstacle_2_width, obstacle_2_height))]
+    list_length = len(numbers)
+    size = 4
 
+    for start in range(0, list_length, size):
 
-3 obstacles
+        section = numbers[start:start+size]
 
-[((obstacle_1_x, obstacle_1_y), (obstacle_1_width, obstacle_1_height)),
- ((obstacle_2_x, obstacle_2_y), (obstacle_2_width, obstacle_2_height)),
- ((obstacle_3_x, obstacle_3_y), (obstacle_3_width, obstacle_3_height))]
+        # Insertion sort each section
+        insertion_sort(section)
 
+        # Replace section of original list with sorted section
+        numbers[start:start+size] = section
 
-1. Copy your code from Consolidation Exercise 1, Task 2: Collision Avoidance. 
+    # Merge increasingly large sections until single merged list achieved 
+    while size < list_length:
+        for start in range(0, list_length, 2*size):
+            left_section = numbers[start:start+size]
+            right_section = numbers[start+size:start+2*size]
 
-2. Update your programme so that any number of obstacles can be generated, and the robot detects and avoids all obstcles
-'''
+            merged = merge(left_section, right_section)
+
+            numbers[start:start+len(merged)] = merged
+
+        size *= 2

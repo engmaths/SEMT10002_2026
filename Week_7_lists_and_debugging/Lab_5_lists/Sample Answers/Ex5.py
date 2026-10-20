@@ -1,20 +1,19 @@
 """
-Build a sorting algorithm, inspired by Timsort, that takes advantage of the fact that 
-real-world data is often already partly sorted
+Build a sorting algorithm, inspired by Timsort, that takes advantage of the fact that real-world data is often already partly sorted
 
-Modify the merge_sort function so that it identifies runs of already sorted data 
-and uses insertion sort on unsorted sections only before merging sections
+Breaking the problem down into steps...
 
-#### Rules
+Can you:
+- Idenitify the start and end positions of runs of 3 or more ascending values in a list 
+- Use insertion sort to sort the gaps (unordered sections between the runs)
+- When sorting these gaps, can you break them down into sub-sections of data of maximum length 4 (look at how this is done in merge_sort function)
+- Merge increasingly large sections until a single merged list achieved (look at how this is done in merge_sort function) 
+
+Rules
 - Don't use `sorted()`
 - Don't use `.sort()`
 - You may use functions you've written yourself
 - Your algorithm should work for lists of arbitrary length
-
-Going further...
-- Update your function to detect descending runs and reverse them.
-- Update your function to break longer runs of unsorted data down into smaller sections 
-(you decide what counts as a 'longer' run)
 """
 
 def insertion_sort(numbers):
@@ -95,120 +94,6 @@ def mergesort(numbers):
 
         size *= 2
 
-
-
-# def my_timsort(numbers):
-#     """
-#     Sorts a list of values in ascending order in-place
-#     by sorting sections of data of maximum length 4 using 
-#     insertion sort, then merging increasingly large sections until a 
-#     single merged list achieved 
-#     """
-#     # Array to store sections of the list
-#     run = []
-
-#     # Arrays to store start and end of runs 
-#     run_start_idxs = []
-#     run_end_idxs = []
-#     run = []
-
-#     for i, j in enumerate(numbers):
-
-#         # Add item to the run
-#         run.append(j)
-
-#         if len(run)>1:
-
-#             # Terminate run if the last two items of the run are decending order
-#             if run[-1]<run[-2]:
-
-#                 # If there is a run of 3 or more ascending items, store the run
-#                 if len(run) > 3:
-#                     print("run of", len(run)-1, run[:-1])
-#                     run_end_idxs.append(i)
-#                     run_start_idxs.append(i-len(run)+1)
-
-#                 # Start a new run
-#                 run = [j]
-    
-#     # If list termintes part-way through a run of 3 or more ascending items, store the run
-#     if len(run) > 2:
-#         print("run of", len(run), run)
-#         run_end_idxs.append(i+1)
-#         run_start_idxs.append(i+1-len(run))
-
-#     print('run start idxs', run_start_idxs)
-#     print('run end idxs', run_end_idxs)
-
-#     # ******
-
-#     # Use run start and end indexes to define gap start and end indexes 
-#     gap_start_idxs = run_end_idxs
-#     gap_end_idxs = run_start_idxs
-
-#     # Add the start and end of the list to the indexes
-#     gap_start_idxs.insert(0,0)
-#     gap_end_idxs.append(len(numbers))
-
-#     # An array to store all section starts
-#     section_start_idxs = run_start_idxs.copy()
-
-#     # Insertion sort all unsorted sections and record start and end values
-#     size = 4
-
-#     print('numbers', numbers)
-
-#     for gap_start, gap_end in zip(gap_start_idxs, gap_end_idxs):
-#         # print(gap_start, gap_end)
-
-#         for section_start in range(gap_start, gap_end, size):
-#             # Store start of each section of unsorted data
-#             section_start_idxs.append(section_start)
-
-#             # Determine section end
-#             section_end = min(section_start+size, gap_end)
-
-#             section = numbers[section_start:section_end]
-#             print(section)
-
-#             # Insertion sort section
-#             insertion_sort(section)
-#             print(section)
-
-#             numbers[section_start:section_end] = section
-
-#     print('numbers', numbers)
-
-#     # ******
-
-#     # Merge nieghbouring sections 
-
-#     # Sort section start indexes into ascending order
-#     # print(section_start_idxs)
-#     insertion_sort(section_start_idxs)
-#     print('section_start_idxs', section_start_idxs)
-
-#     # Add the end of the list to the indexes
-#     section_start_idxs.append(len(numbers)+1)
-#     print('section_start_idxs',section_start_idxs)
-
-#     # Until the only section start indexes are start and end of the list 
-#     while(len(section_start_idxs)>2):
-
-#         # Merge 
-#         for i in range(0, len(section_start_idxs)-2, 2):
-#             idxs = section_start_idxs
-#             merged_section = merge(numbers[idxs[i]: idxs[i+1]],
-#                                    numbers[idxs[i+1]: idxs[i+2]])
-            
-#             numbers[idxs[i]:idxs[i+2]] = merged_section
-
-#         # Update section start indexes
-#         print()
-#         print(numbers)
-#         section_start_idxs = section_start_idxs[::2]
-#         print(section_start_idxs)
-
 def identify_runs(numbers):
     """
     Idenitifies runs of 3 or more ascending values in a list
@@ -255,9 +140,13 @@ def identify_runs(numbers):
 
 def sort_unsorted_sections(run_start_idxs, run_end_idxs, numbers):
     """
-    Insertion sorts all unsorted sections of a list
+    Insertion sorts all unsorted sections of a list, broken down into
+    subsections of maximum length 4 values. 
     Returns record start value of all ordered sections in the list
     """
+
+    # Maximum length of section
+    size = 4
     
     # Use run start and end indexes to define gap start and end indexes 
     gap_start_idxs = run_end_idxs.copy()
@@ -272,9 +161,6 @@ def sort_unsorted_sections(run_start_idxs, run_end_idxs, numbers):
 
     # An array to store all section starts
     section_start_idxs = run_start_idxs.copy()
-
-    # Insertion sort all unsorted sections and record start and end values
-    size = 4
 
     print('numbers', numbers)
 
