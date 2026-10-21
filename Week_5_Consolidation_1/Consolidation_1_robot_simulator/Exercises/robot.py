@@ -167,8 +167,17 @@ def run_scenario(controller, start_x, start_y, start_theta, max_time = 50, goal_
 
 def controller_1(x, y, theta, goal_x, goal_y, obstacle_x=None, obstacle_y=None, obstacle_radius=None):
 
-    left = random.random()
-    right = random.random()
+    x_distance = (goal_x - x) * math.cos(theta) 
+    y_distance = (goal_y - y) * math.sin(theta)
+    error = x_distance + y_distance
+
+    if abs(error) > GOAL_TOLERANCE:
+        k = 0.005
+        speed = k * error
+    else:
+        speed = 0
+
+    return speed, speed
 
     return left, right 
 
