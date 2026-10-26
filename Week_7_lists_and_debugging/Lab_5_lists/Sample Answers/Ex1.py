@@ -43,9 +43,11 @@ marks_by_question = [[6, 10, 7,  4],
 # b
 # -------------------------------------------
 # Approach i - using loops
-for question in marks_by_question:
-    mean = sum(question)/len(question)
-    print(f"Averge = {mean}")
+print("-----------B-----------")
+for i, question in enumerate(marks_by_question, start=1):
+    average = sum(question)/len(question)
+    print("The average mark for question", i, "is", average)
+print()
 
 # Approach ii - using nested loops to traverse a nested list
 n_students = len(marks_by_student)
@@ -55,17 +57,21 @@ for question in range(n_questions):
     total = 0
     for student in marks_by_student:
         total += student[question]
-    mean = total/n_students
-    print(f"Q{question+1} average = {mean}")
+    average = total/n_students
+    print("The average mark for question", question+1, "is", average)
+print()
 
 # Approach iii - using zip to unpack a nested list
-for i, j in enumerate(zip(*marks_by_student)):
-    mean = sum(j)/len(j)
-    print(f"Q{i+1} average = {mean}")
+for i, j in enumerate(zip(*marks_by_student), start=1):
+    average = sum(j)/len(j)
+    print("The average mark for question", i, "is", average)
+print()
+
 
 # -------------------------------------------
 # c
 # -------------------------------------------
+print("-----------C-----------")
 total_marks = [10, 5, 6]
 
 # Approach i - using nested loops to traverse a nested list
@@ -76,11 +82,11 @@ for question, total in zip(marks_by_question, total_marks):
         percentage = mark/total * 100
         new_line.append(percentage)
     new_table.append(new_line)
-print(new_table)
+print("New table:", new_table)
 
 # Approach ii - using nested list comprehension
 new_table = [[q/total*100 for q in question] for question, total in zip(marks_by_question, total_marks)]
-print(new_table)
+print("New table:", new_table)
 
 # Approach iii - using nested loops to traverse a nested list
 new_table =[]
@@ -89,45 +95,52 @@ for student in marks_by_student:
     for mark, total in zip(student, total_marks):
         new_line.append(mark/total*100)
     new_table.append(new_line)
-print(new_table)
+print("New table:", new_table)
 
 # Approach iv - using nested list comprehension
 new_table = [[mark/total*100 for mark, total in zip(student, total_marks)] for student in marks_by_student]
-print(new_table)
+print("New table:", new_table)
+print()
 
 # -------------------------------------------
 # d
 # -------------------------------------------
+print("-----------D-----------")
+students = ["martin", "arthur", "hemma", "josh"]
 assessment_total = sum(total_marks)
 
 # Approach i - using a loop to traverse a list
-for student in marks_by_student:
-    student_percentage = sum(student)/assessment_total*100
-    print(f"Assessment_percentage = {student_percentage} %")
+for student, marks in zip(students, marks_by_student):
+    percentage = sum(marks)/assessment_total*100
+    print(student, "scored", percentage, "%")
+print()
 
-# Approach ii - using a loop with zip function to traverse list items simultaneously
-for student in zip(*marks_by_question):
-    student_percentage = sum(student)/assessment_total*100
-    print(f"Assessment_percentage = {student_percentage} %")
+# Approach ii - using a loop with zip function to traverse list items for each student simultaneously
+for student, marks in zip(students, zip(*marks_by_question)):
+    percentage = sum(marks)/assessment_total*100
+    print(student, "scored", percentage, "%")
+print()
+
 
 # Approach iii - using nested loops to traverse a nested list
-martin = 0
-arthur = 0
-hemma = 0
-josh = 0
-students = [martin, arthur, hemma, josh]
+total_marks_by_student = [0,0,0,0]
+n_students = len(total_marks_by_student)
 
-for marks in marks_by_question:
-    for s, m in zip(range(len(students)), marks):
-        students[s] += m
+# Find total marks for each stuednt for each question
+for question in marks_by_question:
+    for i in range(n_students):
+        total_marks_by_student[i] += question[i]
 
-for s in range(len(students)):
-    students[s] = students[s]/assessment_total*100
-print(students)
+# Convert total amrks to percentage for each student
+for i,j in zip(total_marks_by_student, students):
+    percentage = i/assessment_total*100
+    print(j, "scored", percentage, "%")
+print()
+
 
 # Approach iii - using list comprehension
-assessment_percentages = [sum(student)/assessment_total*100 for student in marks_by_student]
-print(assessment_percentages) 
+percentages = [sum(student)/assessment_total*100 for student in marks_by_student]
+print("Student scores as percentages:", percentages) 
 
 
 
