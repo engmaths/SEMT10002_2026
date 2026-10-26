@@ -3,68 +3,113 @@
 Exercise 3
 ================ 
 
-Planet  Diameter (km)   Mass (relative to Earth = 1.00)   Rotation period 
-Mercury 4,878           0.06                              58.65 (d) 
-Venus   12,100          0.82                              243 (d)  
-Earth   12,756          1.00                              23.934 (h)  
-Mars    6,794           0.11                              24.623 (h)  
-Jupiter 142,800         317.89                            9.842  (h)  
-Saturn  120,000         95.17                             10.233 (h)  
-Uranus  52,400          14.56                             16 (h) 
-Neptune 48,400          17.24                             18 (h)   
 
-1. Write a program that identifies and prints the name of the planet with the lowest density.
-  Assume each planet is a perfect sphere
+Use a dictionary to represent the file system shown
 
-2. Write a program that identifies and prints the names and rotation periods of planets
- with a rotation period shorter than Earth's.
+Update the functions implementig the breadth-first and depth-first search algorithms to navigate the file system representation and:
+a) stop when the file week1.pdf is found
+b) return the file path to it
+c) which function do you think is better suited to this task and why? 
+
+Now consider if a file with the same name exists in two different locations e.g. a file named week1.pdf is in directory CPA and directory MDM
+d) Update your functions to print all file paths that exist to a file named week1.pdf (you may add a file called week1.pdf to the CPA directory and any other locations in the file system to test your code works) 
+
+
+home/
+├── documents/
+│   ├── CPA/
+│   │   ├── week0.ipynb
+│   │   ├── week1.ipynb
+│   │   └── week2.ipynb
+│   └── MDM/
+│       ├── week1.pdf
+│       └── week2.pdf
+├── photos/
+│   ├── weekend.png
+│   └── me.jpg
+└── downloads/
+    ├── application_form.docx
+    └── schedule.png
+
 '''
 
-from math import pi
 
-planets = {
-    "Mercury": {"diameter": 4878,  "mass": 0.06,    "rotation": 58.65,  "unit": "d"},
-    "Venus":   {"diameter": 12100, "mass": 0.82,    "rotation": 243,    "unit": "d"},
-    "Earth":   {"diameter": 12756, "mass": 1.00,    "rotation": 23.934, "unit": "h"},
-    "Mars":    {"diameter": 6794,  "mass": 0.11,    "rotation": 24.623, "unit": "h"},
-    "Jupiter": {"diameter": 142800, "mass": 317.89, "rotation": 9.842,  "unit": "h"},
-    "Saturn":  {"diameter": 120000, "mass": 95.17,  "rotation": 10.233, "unit": "h"},
-    "Uranus":  {"diameter": 52400,  "mass": 14.56,  "rotation": 16,     "unit": "h"},
-    "Neptune": {"diameter": 48400,  "mass": 17.24,  "rotation": 18,     "unit": "h"}
+def bfs(tree, start):
+    """
+    Uses the breadth-first search algorithm to print the items of a graph/netork level by level
+    """
+
+    # Start with a queue containing the node we want to visit first 
+    queue = [start]
+
+    # Keep going while there are still nodes waiting to be visited
+    while queue:
+        print('queue:', queue)
+        print()
+
+        # Remove the FIRST node added to the queue
+        node = queue.pop(0)
+        print('node visited:', node)
+        print()
+
+        # Add all the node's children to the stack
+        for child in tree[node]:
+            queue.append(child)
+
+
+def dfs(tree, start):
+    """
+    Uses the depth-first search algorithm to print the items of a graph/netork branch by branch
+    """
+    # Start with a stack containing the node we want to visit first
+    stack = [start]
+
+    # Keep going while there are still nodes waiting to be visited
+    while stack:
+        print('stack:',end="\n")
+        for i in reversed(stack):
+            print(i)
+
+        # Remove the LAST node added to the stack
+        node = stack.pop()
+        print()
+        print('node visited:', node)
+        print()
+        
+        # Add all the node's children to the stack
+        for child in tree[node]:
+            stack.append(child)
+
+        # To traverse in the same order as depth first search
+        # for child in reversed(tree[node]):
+        #     stack.append(child)
+
+# -------------------------------------------
+# a
+# -------------------------------------------
+"""
+home/
+├── documents/
+│   ├── CPA/
+│   │   ├── week0.ipynb
+│   │   ├── week1.ipynb
+│   │   └── week2.ipynb
+│   └── MDM/
+│       ├── week1.pdf
+│       └── week2.pdf
+├── photos/
+│   ├── weekend.png
+│   └── me.jpg
+└── downloads/
+    ├── application_form.docx
+    └── schedule.png
+"""
+
+file_system = {
+    "home": ["documents", "photos", "downloads"],
+    "documents": ["CPA", "MDM"],
+    "photos": ["weekend.jpg", "me.png"],
+    "downloads": ["application_form.docx", "schedule.png"],
+    "CPA": ["week0.ipynb", "week1.ipynb", "week2.ipynb"],
+    "MDM": ["week1.pdf", "week2.pdf"]
 }
-
-
-# Identify and prints the name of the planet with the lowest density
-min_density = None
-name = None
-
-for planet in planets:
-    diameter = planets[planet]["diameter"]
-    mass = planets[planet]["mass"]
-
-    # Compute density 
-    density = mass / (4/3 * pi * (diameter/2)**3)
-
-    # If a new minimum is identified, store the density and planet name
-    if min_density == None or density < min_density:
-        min_density = density
-        name = planet
-  
-print('The planet with the lowest density is', name)
-
-
-"""
-Identify and print the names and rotation periods of planets
-with a rotation period shorter than Earth's
-"""
-earth_rotation = planets["Earth"]["rotation"]
-
-for planet in planets:
-    # Convert rotation periods measured in days to hours
-    if planets[planet]["unit"] == "d":
-        rotation = planets[planet]["rotation"] * earth_rotation
-    else:
-        rotation = planets[planet]["rotation"] 
-
-    if rotation < earth_rotation:
-        print(planet)
