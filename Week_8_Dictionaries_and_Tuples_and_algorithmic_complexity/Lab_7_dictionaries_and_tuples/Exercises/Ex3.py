@@ -3,19 +3,79 @@
 Exercise 3
 ================ 
 
-Planet  Diameter (km)   Mass (relative to Earth = 1.00)   Rotation period 
-Mercury 4,878           0.06                              58.65 (d) 
-Venus   12,100          0.82                              243 (d)  
-Earth   12,756          1.00                              23.934 (h)  
-Mars    6,794           0.11                              24.623 (h)  
-Jupiter 142,800         317.89                            9.842  (h)  
-Saturn  120,000         95.17                             10.233 (h)  
-Uranus  52,400          14.56                             16 (h) 
-Neptune 48,400          17.24                             18 (h)   
 
-1. Write a program that identifies and prints the name of the planet with the lowest density.
-  Assume each planet is a perfect sphere
+a) Use a dictionary to represent the file system shown
 
-2. Write a program that identifies and prints the names and rotation periods of planets
- with a rotation period shorter than Earth's.
+b) Update the function for breadth-first OR depth-first search algorithms (or try both if you have time!):
+i) check if a specified file/directory (let's use week1.pdf as an example) exists in the starting directory including within any subdirectories
+ii) count all .pdf files within the starting directory including within any subdirectories
+ii) if the specified file/directory does not exist, create a new  file/directory with the specified name in the starting directory
+
+home/
+├── documents/
+│   ├── CPA/
+│   │   ├── week0.ipynb
+│   │   ├── week1.ipynb
+│   │   └── week2.ipynb
+│   └── MDM/
+│       ├── week1.pdf
+│       └── week2.pdf
+├── photos/
+│   ├── weekend.png
+│   └── me.jpg
+└── downloads/
+    ├── application_form.docx
+    └── schedule.png
+
 '''
+
+
+def bfs(tree, start):
+    """
+    Uses the breadth-first search algorithm to print the items of a graph/network level by level
+    """
+
+    # Start with a queue containing the node we want to visit first 
+    queue = [start]
+
+    # Keep going while there are still nodes waiting to be visited
+    while queue:
+        print('queue:', queue)
+        print()
+
+        # Remove the FIRST node added to the queue
+        node = queue.pop(0)
+        print('node visited:', node)
+        print()
+
+        # Add all the node's children to the stack
+        for child in tree[node]:
+            queue.append(child)
+
+
+def dfs(tree, start):
+    """
+    Uses the depth-first search algorithm to print the items of a graph/netork branch by branch
+    """
+    # Start with a stack containing the node we want to visit first
+    stack = [start]
+
+    # Keep going while there are still nodes waiting to be visited
+    while stack:
+        print('stack:',end="\n")
+        for i in reversed(stack):
+            print(i)
+
+        # Remove the LAST node added to the stack
+        node = stack.pop()
+        print()
+        print('node visited:', node)
+        print()
+        
+        # Add all the node's children to the stack
+        for child in tree[node]:
+            stack.append(child)
+
+        # To traverse in the same order as depth first search
+        # for child in reversed(tree[node]):
+        #     stack.append(child)

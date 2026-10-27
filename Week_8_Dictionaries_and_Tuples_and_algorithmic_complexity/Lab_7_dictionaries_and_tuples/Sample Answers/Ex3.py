@@ -158,6 +158,7 @@ def bfs_updated(tree, start, item_to_find=None):
     # Add item to starting directory if not found 
     if found==False and item_to_find!= None:
         tree[start].append(item_to_find)
+        tree[item_to_find]=[]
 
     return pdf_count
 
@@ -205,20 +206,17 @@ def dfs_updated(tree, start, item_to_find=None):
     # Add item to starting directory if not found 
     if found==False and item_to_find!= None:
         tree[start].append(item_to_find)
+        tree[item_to_find]=[]
 
     return pdf_count
 
    
-
-
-
-
 start="CPA"
 n_pdfs = bfs_updated(file_system, start, item_to_find="week1.ipynb")
 print("Number of pdfs in", start, "is", n_pdfs)
 
 start="home"
-n_pdfs = bfs_updated(file_system, start, item_to_find="Movies")
+n_pdfs = bfs_updated(file_system, start, item_to_find="movies")
 print("Number of pdfs in", start, "is", n_pdfs)
 
 for i in file_system.items():
