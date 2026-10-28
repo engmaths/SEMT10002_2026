@@ -8,7 +8,6 @@ Consider a road network represented by the dictionary below.
 In this network some roads are one way (e.g. "M": ["L", "N"] means you can travel from M to N, but because "N": [], you cannot travel from N to M.)
 
 a) Use bfs or dfs (or both if you have time!) to check whether all areas of the network are reachable from a given starting point. 
-Print any starting points from which all areas of the network are NOT reachable
 
 b) Write a function to test whether the network remains connected after closing a specified road
 
@@ -19,15 +18,15 @@ roads = {
     "B": ["A", "D"],
     "C": ["A", "D", "E"],
     "D": ["B", "C", "F"],
-    "E": ["C", "F", "G"],
-    "F": ["D", "E", "G", "H"],
-    "G": ["E", "F", "H"],
-    "H": ["F", "G", "I"],
+    "E": ["G"],
+    "F": ["D", "G", "H"],
+    "G": ["E", "F", "I"],
+    "H": ["F", "I"],
     "I": ["H", "J"],
-    "J": ["I", "K"],
-    "K": ["J", "L"],
-    "L": ["K", "M"],
-    "M": ["L", "N"],
+    "J": ["K"],
+    "K": ["L"],
+    "L": ["M"],
+    "M": ["N"],
     "N": []
 }
 
@@ -121,7 +120,9 @@ def test_reachable_with_bfs(graph, start):
                 visited.append(neighbour)
 
     if sorted(visited) == sorted(graph.keys()):
-            print('All cities reachable from', start)
+        print('All cities reachable from', start)
+    else:
+        print('Not all cities reachable from', start)
 
 
 
@@ -161,7 +162,19 @@ def test_reachable_with_dfs(graph, start):
     
     if sorted(visited) == sorted(graph.keys()):
         print('All cities reachable from', start)
+    else:
+        print('Not all cities reachable from', start)
+
 
 
 test_reachable_with_dfs(roads, "B")
-test_reachable_with_dfs(roads, "J")
+# test_reachable_with_dfs(roads, "J")
+# test_reachable_with_bfs(roads, "J")
+
+
+# -------------------------------------------
+# b
+# -------------------------------------------
+
+def test_connectivity():
+    pass
