@@ -1,6 +1,8 @@
 import math
 import random
 from robot_plotter import init_plot, snapshot, show_plot
+from math import sin, cos, pi
+from time import sleep
 
 
 #I've made these variable names upper case to represent that they are constants (i.e later code shouldn't re-assign them)
@@ -21,6 +23,8 @@ MAX_WHEEL_SPEED = 10
 WHEEL_SEPARATION_MM = WHEEL_SEPARATION_IN * 25.4
 WHEEL_RADIUS_MM = WHEEL_RADIUS_IN * 25.4
 ROBOT_RADIUS_MM = ROBOT_RADIUS_IN * 25.4
+
+bug_flag = False
 
 def average(m, n):
     return 0.5 * (m + n)
@@ -70,7 +74,7 @@ def get_new_position(duration,          # seconds
                      omega_right,       # rads/second
                      x_init = 0,        # initial x position
                      y_init = 0,        # initial y position    
-                     theta_init = 0,     # inital heading angle theta
+                     theta_init = 0,    # inital heading angle theta
                      dt = 0.1   # seconds 
                      ):
 
@@ -96,15 +100,15 @@ def get_new_position(duration,          # seconds
                                                 WHEEL_SEPARATION_MM)
     #Perform integration steps
     for i in range(0, n_steps):
-        x = x + (math.cos(theta) * dt * linear_speed)
-        y = y + (math.sin(theta) * dt * linear_speed)
+        x = x + (cos(theta) * dt * linear_speed)
+        y = y + (sin(theta) * dt * linear_speed)
         theta = theta + (dt * angular_speed)
 
     # If our integration time is not evenly divided by the step size, 
     # we need to perform one final step to catch the remaining time.
     if remainder > 0:
-        x = x + remainder * linear_speed * math.cos(theta)
-        y = y + remainder * linear_speed * math.sin(theta)
+        x = x + remainder * linear_speed * cos(theta)
+        y = y + remainder * linear_speed * sin(theta)
         theta = (theta + remainder * angular_speed)
 
     return x,y,theta
@@ -129,15 +133,15 @@ def get_new_position(duration,          # seconds
 
 #     #Perform integration steps
 #     for step in range(n_steps):
-#         x = x + dt * linear_speed * math.cos(theta)
-#         y = y + dt * linear_speed * math.sin(theta)
+#         x = x + dt * linear_speed * cos(theta)
+#         y = y + dt * linear_speed * sin(theta)
 #         theta = (theta + dt * angular_speed)
 
 #     #If our integration time is not evenly divided by the step size, 
 #     # we need to perform one final step to catch the remaining time.
 #     if remainder > 0:
-#         x = x + remainder * linear_speed * math.cos(theta)
-#         y = y + remainder * linear_speed * math.sin(theta)
+#         x = x + remainder * linear_speed * cos(theta)
+#         y = y + remainder * linear_speed * sin(theta)
 #         theta = (theta + remainder * angular_speed)
 
 #     return x, y, theta
@@ -162,10 +166,79 @@ def is_inside_arena(x, y):
 
 def has_collided(x, y, obstacle_x, obstacle_y, obstacle_radius):
 
+    distance_to_obstacle = ((x-obstacle_x)**2 + (y-obstacle_y)**2)**(1/2)
+    # print('distance_to_obstacle', distance_to_obstacle)
+
+    threshold = ROBOT_RADIUS_MM + obstacle_radius
+    # print('collision_threshold', threshold)
+
     #Checks for collisions with an obstacle
     if (x-obstacle_x)**2 + (y-obstacle_y)**2 < (ROBOT_RADIUS_MM + obstacle_radius)**2:
         return True
     return False
+
+
+# def has_detected_obstacle(x, y, obstacle_x, obstacle_y, obstacle_radius):
+
+#     # Distance from an obstacle the robot needs to be to detect it
+#     sensor_range = 400
+
+#     distance_to_obstacle = ((x-obstacle_x)**2 + (y-obstacle_y)**2)**(1/2)
+#     print('distance_to_obstacle', distance_to_obstacle)
+
+#     threshold = ROBOT_RADIUS_MM + obstacle_radius + sensor_range
+#     print('detection_threshold', threshold)
+
+#     #Checks for collisions with an obstacle
+#     if distance_to_obstacle < threshold:
+#         return True
+#     return False
+
+# def has_detected_obstacle(x, y, obstacle_x, obstacle_y, obstacle_radius):
+
+#     # Distance from an obstacle the robot needs to be to detect it
+#     sensor_range = 400
+
+#     distance_to_obstacle = ((x-obstacle_x)**2 + (y-obstacle_y)**2)**(1/2)
+#     print('distance_to_obstacle', distance_to_obstacle)
+
+#     threshold = ROBOT_RADIUS_MM + obstacle_radius + sensor_range
+#     print('detection_threshold', threshold)
+
+#     #Checks for collisions with an obstacle
+#     if distance_to_obstacle < threshold:
+#         return True
+#     return False
+
+def bug_detected_obstacle(x, y, theta, obstacle_x, obstacle_y, obstacle_radius):
+    # Distance from an obstacle the robot needs to be to detect it
+    sensor_range = 400
+
+    # Find a point 400 mm in front of the robot 
+    sensor_tip_x = x + sensor_range*cos(theta)
+    sensor_tip_y = y + sensor_range*sin(theta)
+    # print('x,y', x,y)
+    # print(x + sensor_range*cos(pi/4), y + sensor_range*sin(pi/4))
+    # print(x + sensor_range*cos(3*pi/4), y + sensor_range*sin(3*pi/4))
+    # print(x + sensor_range*cos(5*pi/4), y + sensor_range*sin(5*pi/4))
+    # print(x + sensor_range*cos(7*pi/4), y + sensor_range*sin(7*pi/4))
+
+    # Check if point lies inside of obstacle 
+
+    # print((sensor_tip_x - obstacle_x)**2 + (sensor_tip_y-obstacle_y)**2)
+    # print(obstacle_radius**2)
+
+
+    if (sensor_tip_x - obstacle_x)**2 + (sensor_tip_y-obstacle_y)**2 <= obstacle_radius**2:
+        return True
+    else:
+        return False
+
+    
+    
+    
+    
+
 
 
 def run_scenario(controller, start_x, start_y, start_theta, 
@@ -223,6 +296,9 @@ def run_scenario(controller, start_x, start_y, start_theta,
             print("Error - robot tried to leave the arena")
             break 
 
+        # if has_detected_obstacle(x, y, obstacle_x, obstacle_y, obstacle_radius):
+        #         print("Obstacle detected 2")
+
         #Check we haven't collided with the obstacle
         if obstacle and has_collided(x, y, obstacle_x, obstacle_y, obstacle_radius):
             print("Error - robot collised with the obstacle")
@@ -240,92 +316,59 @@ def run_scenario(controller, start_x, start_y, start_theta,
     # Plot the map one final time, with a longer (5 seconds) pause so we can inspect 1.
     show_plot(WORLD_X_MIN, WORLD_X_MAX, WORLD_Y_MIN, WORLD_Y_MAX, goal, obstacle, pause=5.0)
 
-# def controller_1(x, y, theta, 
-#                  goal_x, goal_y, 
-#                  obstacle_x=None, obstacle_y=None, 
-#                  obstacle_radius=None):
-
-#     x_distance = (goal_x - x) * math.cos(theta) 
-#     y_distance = (goal_y - y) * math.sin(theta)
-#     error = x_distance + y_distance
-
-#     if abs(error) > GOAL_TOLERANCE:
-#         k = 0.005
-#         speed = k * error
-#     else:
-#         speed = 0
-
-#     return speed, speed
-
-#     return left, right 
-
-
-# def move_linearly_to_goal(x, y, theta, 
-#                  goal_x, goal_y, 
-#                  obstacle_x=None, 
-#                  obstacle_y=None, 
-#                  obstacle_radius=None): 
-
-#     x_distance = (goal_x - x) #* math.cos(theta) 
-#     y_distance = (goal_y - y) #* math.sin(theta)
-#     error = (x_distance**2 + y_distance**2)**(1/2)
-
-#     if abs(error) > GOAL_TOLERANCE:
-#         k = 0.005
-#         speed = k * error
-#     else:
-#         speed = 0
-
-#     return speed, speed
 
 def move_linearly_to_goal(error): 
-        
+    print('Move to goal')
+    # sleep(1)
     k = 0.005
     speed = k * error
-
     return speed
 
-# def rotate_to_goal(x, y, theta, 
-#                  goal_x, goal_y, 
-#                  obstacle_x=None, 
-#                  obstacle_y=None, 
-#                  obstacle_radius=None): 
-
-#     x_distance = (goal_x - x) #* math.cos(theta) 
-#     y_distance = (goal_y - y) #* math.sin(theta)
-
-#     print('x_distance', x_distance)
-#     print('y_distance', y_distance)
-
-#     goal_angle = math.atan2(y_distance, x_distance)
-#     print('robot angle', theta)
-#     print('goal_angle', goal_angle)
-
-#     angular_error = goal_angle - theta 
-#     print('angle_error', angular_error)
-
-#     if abs(angular_error) > ANGULAR_GOAL_TOLERANCE:
-#         k = 0.5
-#         speed = k * angular_error
-#     else:
-#         speed = 0
-
-#     return -speed, speed
-
 def rotate_to_goal(angular_error): 
-    k = 0.5
+    print('Rotate to goal')
+    # sleep(1)
+    k = 1
     speed = k * angular_error
     return speed
 
-    
+def avoid_obstacle(obstacle):
+    print('Avoid obstacle')
+    # sleep(1)
+    while obstacle == True:
+        pass
+
+def compute_wheel_speed_for_rotation(angle_degrees):
+    """
+    Returns the wheel speeds needed to achieve the
+    input angle (degrees) in a 1 second turn
+    """
+    angle_rads = pi * angle_degrees/180
+    print(angle_rads)
+
+    # print(WHEEL_SEPARATION_MM)
+
+    v_wheel_r = angle_rads * WHEEL_SEPARATION_MM / 2
+    # print(v_wheel_r)
+
+    omega_r = v_wheel_r / ROBOT_RADIUS_MM
+    omega_l = -omega_r
+    # print(omega_r, omega_l)
+
+    return omega_l, omega_r
+
+
+
+
+# Calculate wheel speed
+
 def controller_1(x, y, theta, 
                  goal_x, goal_y, 
                  obstacle_x=None, 
                  obstacle_y=None, 
                  obstacle_radius=None):
 
-    x_distance = (goal_x - x) #* math.cos(theta) 
-    y_distance = (goal_y - y) #* math.sin(theta)
+    x_distance = (goal_x - x) #* cos(theta) 
+    y_distance = (goal_y - y) #* sin(theta)
     error = (x_distance**2 + y_distance**2)**(1/2)
 
     if abs(error) > GOAL_TOLERANCE:
@@ -339,8 +382,8 @@ def controller_2(x, y, theta, goal_x, goal_y,
                  obstacle_x=None, obstacle_y=None, 
                  obstacle_radius=None):
 
-    x_distance = (goal_x - x) #* math.cos(theta) 
-    y_distance = (goal_y - y) #* math.sin(theta)
+    x_distance = (goal_x - x) #* cos(theta) 
+    y_distance = (goal_y - y) #* sin(theta)
     error = (x_distance**2 + y_distance**2)**(1/2)
     goal_angle = math.atan2(y_distance, x_distance)
     angular_error = goal_angle - theta 
@@ -355,12 +398,44 @@ def controller_2(x, y, theta, goal_x, goal_y,
 
     return speed, speed 
 
-def controller_3(x, y, theta, goal_x, goal_y, obstacle_x=None, obstacle_y=None, obstacle_radius=None):
+def controller_3(x, y, theta, goal_x, goal_y, o
+                 bstacle_x=None, obstacle_y=None, obstacle_radius=None):
 
-    left = random.random()
-    right = random.random()
+    x_distance = (goal_x - x) #* cos(theta) 
+    y_distance = (goal_y - y) #* sin(theta)
+    error = (x_distance**2 + y_distance**2)**(1/2)
+    goal_angle = math.atan2(y_distance, x_distance)
+    angular_error = goal_angle - theta 
 
-    return left, right 
+    # check_for_obstacle = has_detected_obstacle_2(x, y, theta, obstacle_x, obstacle_y, obstacle_radius)
+    # print(check_for_obstacle)
+
+    obstacle_detected = bug_detected_obstacle(x, y, theta, obstacle_x, obstacle_y, obstacle_radius)
+
+    if obstacle_detected:
+        print("Obstacle detected")
+
+
+
+        
+        return left, right   
+
+    
+    # if has_detected_obstacle(x, y, obstacle_x, obstacle_y, obstacle_radius):
+    #     print("Obstacle detected")
+    #     left, right = compute_wheel_speed_for_rotation(10)
+    #     print(has_detected_obstacle_2(x, y, theta, obstacle_x, obstacle_y, obstacle_radius))
+    #     return 0, 0
+    #     return left, right    
+    elif abs(angular_error) > ANGULAR_GOAL_TOLERANCE:
+        speed = rotate_to_goal(angular_error)
+        return -speed, speed
+    elif abs(error) > GOAL_TOLERANCE:
+        speed = move_linearly_to_goal(error)
+    else:
+        speed = 0
+
+    return speed, speed 
 
 def controller_4(x, y, theta, goal_x, goal_y, obstacle_x=None, obstacle_y=None, obstacle_radius=None):
     '''
@@ -382,7 +457,7 @@ def main():
     # Scenario 1 -- Can you move in a straight line and stop at the goal?
     start_x = 5000
     start_y = 1000
-    start_theta = math.pi / 2
+    start_theta = pi / 2
     goal_x = 5000
     goal_y = 8000
     max_time = 100
@@ -392,18 +467,17 @@ def main():
     
     start_x = 1000
     start_y = 5000
-    start_theta = math.pi
+    start_theta = pi
     goal_x = 1000
     goal_y = 1000
     max_time = 100
-    run_scenario(controller_2, start_x, start_y, start_theta, max_time, goal_x, goal_y)
+    # run_scenario(controller_2, start_x, start_y, start_theta, max_time, goal_x, goal_y)
     
 
     # Scenario 3 -- Can you naivgate past a fixed obstacle?
-    '''
     start_x = 5000
     start_y = 1000
-    start_theta = math.pi
+    start_theta = pi
     goal_x = 5000
     goal_y = 8000
     obstacle_x = 5000
@@ -411,13 +485,13 @@ def main():
     obstacle_radius = 500
     max_time = 100
     run_scenario(controller_3, start_x, start_y, start_theta, max_time, goal_x, goal_y, obstacle_x, obstacle_y, obstacle_radius)
-    '''
+    
 
     # Scenario 4 -- Can you navigate past a randomly located obstacle?
-    '''
+    
     start_x = 100 + 4900 * random.random()
     start_y = 100 + 900 * random.random()
-    start_theta = math.pi
+    start_theta = pi
     goal_x = 5000 + (4000 * random.random())
     goal_y = 6000 + (3000 * random.random())
     #Generate an initial obstacle position
@@ -430,8 +504,8 @@ def main():
        obstacle_y = 2500 + (5000 * random.random())
     
     max_time = 200
-    run_scenario(controller_4, start_x, start_y, start_theta, max_time, goal_x, goal_y, obstacle_x, obstacle_y, obstacle_radius)
-    '''
+    # run_scenario(controller_4, start_x, start_y, start_theta, max_time, goal_x, goal_y, obstacle_x, obstacle_y, obstacle_radius)
+    
 
 if __name__ == "__main__":
     main()
