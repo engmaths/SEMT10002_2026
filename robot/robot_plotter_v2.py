@@ -49,9 +49,10 @@ def show_plot(x_min, x_max, y_min, y_max, goals=None, obstacle=None, pause=0):
             facecolor='gray', label='Obstacle')
     
         ax.add_patch(obstacle_patch)
+
     
-    # if goal:
-    #     ax.plot(goal[0], goal[1], 'r*', markersize=15, label='Goal')
+    if goal:
+        ax.plot(goal[0], goal[1], 'r*', markersize=15, label='Goal')
 
     if goals:
         for goal in goals:

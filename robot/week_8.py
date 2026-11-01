@@ -23,6 +23,23 @@ WHEEL_SEPARATION_MM = WHEEL_SEPARATION_IN * 25.4
 WHEEL_RADIUS_MM = WHEEL_RADIUS_IN * 25.4
 ROBOT_RADIUS_MM = ROBOT_RADIUS_IN * 25.4
 
+# ROBOT_FSM = {
+#     "GO_TO_GOAL": {"obstacle_detected": "AVOID_1"},
+#     "AVOID_1": {"reverse_completed": "AVOID_2"},
+#     "AVOID_2": {"turn_completed": "AVOID_3"},
+#     "AVOID_3": {"move_forward_completed": "AVOID_4"},
+#     "AVOID_4": {"move_forward_completed": "GO_TO_GOAL"}
+#     }
+
+ROBOT_FSM = {
+    "GO_TO_GOAL": "AVOID_1",
+    "AVOID_1": "AVOID_2",
+    "AVOID_2": "AVOID_3",
+    "AVOID_3": "AVOID_4",
+    "AVOID_4": "GO_TO_GOAL"
+}
+
+
 def average(m, n):
     return 0.5 * (m + n)
 
@@ -136,6 +153,12 @@ def has_collided(x, y, obstacle_x, obstacle_y, obstacle_radius):
         return True
     return False
 
+def state_transition(robot, current_state):
+    """
+    Return the state of the robot after transitioning 
+    """
+    return(robot[current_state])
+
 def run_scenario(controller, start_x, start_y, start_theta, 
                  max_time = 50, goals_x=None, goals_y=None, 
                  obstacle_x=None, obstacle_y=None, 
@@ -155,7 +178,6 @@ def run_scenario(controller, start_x, start_y, start_theta,
 
     # Iterate through a series of points
     for goal_x, goal_y in goals:
-
 
         state = 'GO_TO_GOAL'
 
@@ -211,17 +233,21 @@ def run_scenario(controller, start_x, start_y, start_theta,
             # -------------------------------------------------------------
             # Controller 4
             # -------------------------------------------------------------
-            if state == 'AVOID_1':
-                state = 'AVOID_2'
-
-            elif state == 'AVOID_2':
-                state = 'AVOID_3'
-
-            elif state == 'AVOID_3':
-                state = 'AVOID_4'
             
-            elif state == 'AVOID_4':
-                state = 'GO_TO_GOAL'
+            # if state == 'AVOID_1':
+            #     state = 'AVOID_2'
+
+            # elif state == 'AVOID_2':
+            #     state = 'AVOID_3'
+
+            # elif state == 'AVOID_3':
+            #     state = 'AVOID_4'
+            
+            # elif state == 'AVOID_4':
+            #     state = 'GO_TO_GOAL'
+
+            if state != 'GO_TO_GOAL':
+                state = state_transition(ROBOT_FSM, state)
     
 
             #Draw the updated position
@@ -242,7 +268,9 @@ def run_scenario(controller, start_x, start_y, start_theta,
                 print("Obstacle_detected")
                 # Initiate obstacle avoidance sequence
                 if state == 'GO_TO_GOAL':
-                    state = 'AVOID_1'
+                    # state = 'AVOID_1'
+                    state = state_transition(ROBOT_FSM, state)
+                    print(state)
 
         # #Now the main loop has finished, let's see how close we are to the goal.
         # if goal:
@@ -376,6 +404,8 @@ def controller_2(x, y, theta, goal_x, goal_y,
 def controller_3(x, y, theta, goal_x, goal_y,
                  obstacle_x=None, obstacle_y=None, obstacle_radius=None, state='GO_TO_GOAL'):
 
+    print(state)
+
     if state == 'GO_TO_GOAL':
         left, right = controller_2(x, y, theta, goal_x, goal_y)
 
@@ -473,7 +503,7 @@ def main():
     obstacle_radius = 500
     max_time = 10000
     # run_scenario(controller_3, start_x, start_y, start_theta, max_time, goal_x, goal_y, obstacle_x, obstacle_y, obstacle_radius)
-    # run_scenario(controller_3, start_x, start_y, start_theta, max_time, goals_x, goals_y, obstacle_x, obstacle_y, obstacle_radius)
+    run_scenario(controller_3, start_x, start_y, start_theta, max_time, goals_x, goals_y, obstacle_x, obstacle_y, obstacle_radius)
     
     # Scenario 4 -- Can you navigate past a randomly located obstacle?
     start_x = 100 + 4900 * random.random()
@@ -498,7 +528,7 @@ def main():
     
     max_time = 100000
     # run_scenario(controller_4, start_x, start_y, start_theta, max_time, goal_x, goal_y, obstacle_x, obstacle_y, obstacle_radius)
-    run_scenario(controller_4, start_x, start_y, start_theta, max_time, goals_x, goals_y, obstacle_x, obstacle_y, obstacle_radius)
+    # run_scenario(controller_4, start_x, start_y, start_theta, max_time, goals_x, goals_y, obstacle_x, obstacle_y, obstacle_radius)
     
 if __name__ == "__main__":
     main()

@@ -4,9 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-robot_size = 50
-robot_shape = robot_size*np.array([[-1,0,1,-1],
-                                  [-1,1,-1,-1]])
+robot_size = 3.248 * 25.4
+robot_shape = robot_size*np.array([[-1,1,-1,-1],
+                                  [-1,0,1,-1]])
 
 x_log = []
 y_log = []
@@ -24,33 +24,31 @@ def snapshot(x_position,y_position,heading):
     th_log.append(heading)
 
 def rotation_matrix(theta):
-    return np.array([[cos(theta),sin(theta)],
-                     [-sin(theta),cos(theta)]])
+    return np.array([[cos(theta),-sin(theta)],
+                     [sin(theta),cos(theta)]])
 
-def show_plot(map_coords, goal=None, obstacles=None, pause=0):
+def show_plot(x_min, x_max, y_min, y_max, goal=None, obstacle=None, pause=0):
 
     plt.clf()
     #plot walls
 
-    #This plots the bottom line of the map- from x-min to x_max at y=y_min
-    plt.plot([map_coords[0][0], map_coords[0][1]], [map_coords[1][0], map_coords[1][0]], color='red', linewidth=2.0)
+    plt.plot([x_min, x_max], [y_min, y_min], color='red', linewidth=2.0)
     #This plots the top line of the map- from x-min to x_max at y=y_max
-    plt.plot([map_coords[0][0], map_coords[0][1]], [map_coords[1][1], map_coords[1][1]], color='red', linewidth=2.0)
+    plt.plot([x_min, x_max], [y_max, y_max], color='red', linewidth=2.0)
     #This plots the left line of the map- from y-min to y_max at x=x_min
-    plt.plot([map_coords[0][0], map_coords[0][0]], [map_coords[1][0], map_coords[1][1]], color='red', linewidth=2.0)
+    plt.plot([x_min, x_min], [y_min, y_max], color='red', linewidth=2.0)
     #This plots the right line of the map- from y-min to y_max at x=x_min
-    plt.plot([map_coords[0][1], map_coords[0][1]], [map_coords[1][0], map_coords[1][1]], color='red', linewidth=2.0)
+    plt.plot([x_max, x_max], [y_min, y_max], color='red', linewidth=2.0)
 
     fig = plt.gcf()
     ax = fig.gca()
 
-    if obstacles:
-        for ii in obstacles:
-            obstacle_patch = patches.Rectangle(
-                (ii[0][0], ii[0][1]), ii[1][0], ii[1][1],
-                facecolor='gray', label='Obstacle')
-        
-            ax.add_patch(obstacle_patch)
+    if obstacle:
+        obstacle_patch = patches.Circle(
+            (obstacle[0], obstacle[1]), obstacle[2],
+            facecolor='gray', label='Obstacle')
+    
+        ax.add_patch(obstacle_patch)
     
     if goal:
         ax.plot(goal[0], goal[1], 'r*', markersize=15, label='Goal')

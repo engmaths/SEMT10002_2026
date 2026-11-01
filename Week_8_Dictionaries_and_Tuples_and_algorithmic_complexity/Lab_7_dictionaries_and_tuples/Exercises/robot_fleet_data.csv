@@ -1,4 +1,0 @@
-Robot ID,Position x,Position y,Battery (%),Status,Deliveries
-R001,4.2,7.8,87,idle,12
-R002,10.5,3.3,45,moving,19
-R003,1.0,12.4,63,charging,8
