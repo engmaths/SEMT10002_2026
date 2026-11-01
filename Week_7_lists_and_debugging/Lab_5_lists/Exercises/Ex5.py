@@ -1,4 +1,7 @@
 """
+================
+Exercise 5
+================
 Build a sorting algorithm, inspired by Timsort, that takes advantage of the fact that real-world data is often already partly sorted
 
 Breaking the problem down into steps...
