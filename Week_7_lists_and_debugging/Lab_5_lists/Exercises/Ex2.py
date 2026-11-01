@@ -10,6 +10,7 @@ Find and fix the problem with the current function, so that it handles boundary 
 values (the first and last item(s) in a list) correctly.
 Fix the function so that it handles boundary index values (the first and last item(s) 
 in a list) correctly.
+Check that it can handle different values of k.
 
 (b) A moving average filter is used in signal processing for smoothing data
 It returns the average of every N consecutive values in a sequence. 
