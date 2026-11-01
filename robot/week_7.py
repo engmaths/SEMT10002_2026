@@ -156,12 +156,6 @@ def run_scenario(controller, start_x, start_y, start_theta,
     # Iterate through a series of points
     for goal_x, goal_y in goals:
 
-        # #Set initial parameters
-        # x = start_x
-        # y = start_y
-        # theta = start_theta
-        # t = 0
-        # step = 1
 
         state = 'GO_TO_GOAL'
 
@@ -179,12 +173,9 @@ def run_scenario(controller, start_x, start_y, start_theta,
         else:
             obstacle = None
 
-        # #Initialise the plot
-        # init_plot(x, y, theta)
+
 
         #Show the initial configuration for 0.1 seconds
-        # show_plot(WORLD_X_MIN, WORLD_X_MAX, WORLD_Y_MIN, WORLD_Y_MAX, goal, obstacle, pause=0.1)
-        # goals = zip(goals_x, goals_y)
         show_plot(WORLD_X_MIN, WORLD_X_MAX, WORLD_Y_MIN, WORLD_Y_MAX, goals, obstacle, pause=0.1)
 
         #Main simulation loop
@@ -272,9 +263,7 @@ def run_scenario(controller, start_x, start_y, start_theta,
                 break
 
         # Plot the map one final time, with a longer (5 seconds) pause so we can inspect 1.
-        print(goals)
         show_plot(WORLD_X_MIN, WORLD_X_MAX, WORLD_Y_MIN, WORLD_Y_MAX, goals, obstacle, pause=0.1)
-        # show_plot(WORLD_X_MIN, WORLD_X_MAX, WORLD_Y_MIN, WORLD_Y_MAX, goal, obstacle, pause=5.0)
 
 def move_linearly_to_goal(error): 
     print('Move to goal')
@@ -316,7 +305,7 @@ def compute_wheel_speed_for_translation(translation_mm):
     omega = translation_mm / WHEEL_RADIUS_MM
     return omega
 
-def generate_lawnmower(start_x, start_y):
+def generate_lawnmower_sequence(start_x, start_y):
 
     x, y = start_x, start_y
 
@@ -467,7 +456,7 @@ def main():
     start_x = 1000
     start_y = 1000
     start_theta = 0
-    goals_x, goals_y = generate_lawnmower(start_x, start_y) 
+    goals_x, goals_y = generate_lawnmower_sequence(start_x, start_y) 
     max_time = 10000
     run_scenario(controller_2, start_x, start_y, start_theta, max_time, goals_x, goals_y)
     
