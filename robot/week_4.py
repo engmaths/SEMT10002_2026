@@ -191,12 +191,12 @@ print("duration_quarter_turn", duration_quarter_turn)
 x,y,theta = 0,0,0
 
 for i in range(4):
-    # 1. left = 1, right = 1, time = 10 s # Drive straight
+    # 1. Drive straight (left = 1, right = 1, time = 10 s)
     x, y, theta = get_new_position(10, 1, 1, dt = 0.001, 
                                    x_init = x, y_init = y, theta_init = theta)
     print(x,y,theta)
 
-    # 2. left = -1, right = 1, time = ??? # Turn 90 degrees anticlockwise
+    # 2. Turn 90 degrees anticlockwise (left = -1, right = 1, time = ???)
     x, y, theta = get_new_position(duration_quarter_turn, -1, 1, dt = 0.001, 
                                    x_init = x, y_init = y, theta_init = theta)
     print(x,y,theta)
