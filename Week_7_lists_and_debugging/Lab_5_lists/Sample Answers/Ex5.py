@@ -2,22 +2,22 @@
 ================
 Exercise 5
 ================
-Build a sorting algorithm, inspired by Timsort, that takes advantage of the fact that 
-real-world data is often already partly sorted
+Build a sorting algorithm, inspired by Timsort, that takes advantage of the fact that real-world data is often already partly sorted
 
-Modify the merge_sort function so that it identifies runs of already sorted data 
-and uses insertion sort on unsorted sections only before merging sections
+Breaking the problem down into steps...
 
-#### Rules
+Can you:
+- Idenitify the start and end positions of runs of 3 or more ascending values in a list 
+- Find the sequences of unordered data in the gaps between runs
+- Use insertion sort to sort the gaps (unordered sections between the runs)
+- When sorting these gaps, can you break them down into sub-sections of data of maximum length 4 (look at how this is done in merge_sort function)
+- Merge increasingly large sections until a single merged list achieved (look at how this is done in merge_sort function) 
+
+Rules
 - Don't use `sorted()`
 - Don't use `.sort()`
 - You may use functions you've written yourself
 - Your algorithm should work for lists of arbitrary length
-
-Going further...
-- Update your function to detect descending runs and reverse them.
-- Update your function to break longer runs of unsorted data down into smaller sections 
-(you decide what counts as a 'longer' run)
 """
 
 def insertion_sort(numbers):
@@ -121,24 +121,21 @@ def my_timsort(numbers):
 
         if len(run)>1:
 
-            # Test if ascending
-            # if run[-1]>=run[-2]:
-            #     print("ascending")
-                # count += 1
-
-            # Descending
-            # else:
+            # If two sequential descending values are detected
             if run[-1]<run[-2]:
-                # Test if there is a run of 3 or more
-                # if count > 2:
-                if len(run) > 3:
-                    print("run of", len(run)-1, run[:-1])
+
+                # Remove the last value from the run
+                run.pop(-1)
+
+                # Test if the run contains 3 or more values
+                if len(run) >= 3:
+                    print("run of", len(run), run)
+
+                    # Store the start and end of the run in the list
                     run_ends.append(i)
-                    run_starts.append(i-len(run)+1)
-                # print("reset")
+                    run_starts.append(i-len(run))
+      
                 run = [j]
-                # count = 1
-            # print("count=", count)
     
     # If list termintes part-way through a run, record the run
     if len(run) > 2:
@@ -146,37 +143,39 @@ def my_timsort(numbers):
         run_ends.append(i+1)
         run_starts.append(i+1-len(run))
 
-    print(run_starts)
-    print(run_ends)
+    print('starts', run_starts)
+    print('ends', run_ends)
 
     # Insertion sort all unsorted sections and record start and end values
     list_length = len(numbers)
     size = 4
 
+    # Include the start and final values in the list of run start and ends
     run_ends.insert(0,0)
     run_starts.append(len(numbers))
 
-    print(run_starts)
-    print(run_ends)
-
-    print('numbers', numbers)
-
+    # An array to store the starts of both the sections and the sorted sections 
     all_starts = run_starts.copy()
 
+    # Find gaps between runs 
     for e, s in zip(run_ends, run_starts):
 
-        print(e, s)
-
+        # Break the unsorted gaps down into secions of a specified maximum size 
         for start in range(e, s, size):
-            print(start)
+
+            # The end is first of the end of the list or the specified length
             end = min(s, start+size)
+
+            # Section to sort
             section = numbers[start:end]
             # print('section', section)
+
+            # Store the start of the section 
             all_starts.append(start)
 
             # Insertion sort each section
             insertion_sort(section)
-            print(section)
+            # print(section)
 
             # Replace section of original list with sorted section
             numbers[start:end] = section
@@ -184,61 +183,43 @@ def my_timsort(numbers):
         print('numbers', numbers)
 
     # Merge nieghbouring sections 
-    print(all_starts)
+    # print(all_starts)
     insertion_sort(all_starts)
     print(all_starts)
 
-    for s in all_starts:
-        pass
+    # Merge increasingly large sections until single merged list achieved
+    while len(all_starts) > 2:
 
+        # Get pairs of neighbouring sections  
+        for i in range(0,len(all_starts),2):
+            if len(all_starts[i:i+3])==3:
+                s = all_starts[i]
+                m = all_starts[i+1]
+                e = all_starts[i+2]
 
+                left = numbers[s:m]
+                right = numbers[m:e]
 
+                # Merge neighbouring section
+                merged = merge(left, right)
 
+                # Replace in list 
+                numbers[s:e] = merged
+
+                # print(numbers)
+
+        # Remove the middle index form the list of indexes
+        all_starts = all_starts[::2]
+
+        # Make sure the last value hasn't been omitted
+        if len(numbers) not in all_starts:
+            all_starts.append(len(numbers))
+
+        # print(all_starts)
+
+    print(numbers)
 
 nums = [4,1,2,3,5,3,4, 6, 3, 7, 3, 5,3,1,2,8,5,6,7]
+# nums = [4,1,2,3,5,3,4,6,3,7,2,3,4,5]
+print(nums)
 my_timsort(nums)
-
-
-
-
-
-
-
-        
-
-        
-
-
-
-
-#     n = len(numbers)
-#     size = 4
-
-#     for start in range(0, n, size):
-
-#         section = numbers[start:start+size]
-
-#         # Insertion sort each section
-#         insertion_sort(section)
-
-#         # Replace section of original list with sorted section
-#         numbers[start:start+size] = section
-
-#     # Merge increasingly large sections until single merged list achieved 
-#     while size < n:
-#         for start in range(0, n, 2*size):
-#             left_section = numbers[start:start+size]
-#             right_section = numbers[start+size:start+2*size]
-
-#             merged = merge(left_section, right_section)
-
-#             numbers[start:start+len(merged)] = merged
-
-#         size *= 2
-
-
-# numbers = [38, 12, 27, 43, 9, 31, 18, 25, 3, 14]
-# my_timsort(numbers)
-# print(numbers)
-
-
