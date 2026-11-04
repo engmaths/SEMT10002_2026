@@ -5,7 +5,7 @@ Exercise 2
 
 (a) The function given below should return a new list containing the sum of every k 
 consecutive values in a list.
-Every litem in the new list must be the sum of k values. 
+Every item in the new list must be the sum of k values. 
 Find and fix the problem with the current function, so that it handles boundary index 
 values (the first and last item(s) in a list) correctly.
 Fix the function so that it handles boundary index values (the first and last item(s) 
@@ -141,3 +141,10 @@ def filter_wraparound(xs, k):
 
 means = filter_wraparound([1,2,3,4,5,6,7,8,9], 3)
 print(means)
+
+
+
+
+
+
+

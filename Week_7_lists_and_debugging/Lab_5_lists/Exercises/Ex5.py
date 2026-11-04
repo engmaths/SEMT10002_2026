@@ -8,6 +8,7 @@ Breaking the problem down into steps...
 
 Can you:
 - Idenitify the start and end positions of runs of 3 or more ascending values in a list 
+- Find the sequences of unordered data in the gaps between runs
 - Use insertion sort to sort the gaps (unordered sections between the runs)
 - When sorting these gaps, can you break them down into sub-sections of data of maximum length 4 (look at how this is done in merge_sort function)
 - Merge increasingly large sections until a single merged list achieved (look at how this is done in merge_sort function) 

@@ -156,7 +156,6 @@ def run_scenario(controller, start_x, start_y, start_theta,
     # Iterate through a series of points
     for goal_x, goal_y in goals:
 
-
         state = 'GO_TO_GOAL'
 
         # Check to see if we have a goal or not.
@@ -172,8 +171,6 @@ def run_scenario(controller, start_x, start_y, start_theta,
             obstacle = (obstacle_x, obstacle_y, obstacle_radius)
         else:
             obstacle = None
-
-
 
         #Show the initial configuration for 0.1 seconds
         show_plot(WORLD_X_MIN, WORLD_X_MAX, WORLD_Y_MIN, WORLD_Y_MAX, goals, obstacle, pause=0.1)
