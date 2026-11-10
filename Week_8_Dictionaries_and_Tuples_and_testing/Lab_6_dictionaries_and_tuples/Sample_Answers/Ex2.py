@@ -35,6 +35,10 @@ cities["Glenby"] = {"Alden": 5,
                     "Brinford":27,
                     "Fenwick":35
                     }
+cities["Alden"]["Glenby"]=5
+cities["Brinford"]["Glenby"]=27
+cities["Fenwick"]["Glenby"]=35
+
 
 # -------------------------------------------
 # c
@@ -78,6 +82,7 @@ def mean_distance(cities):
     total_distance = 0
     total_connections = 0
     explored = []
+    
     for city_a, distances in cities.items():
 
         for city_b in distances:

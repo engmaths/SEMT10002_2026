@@ -157,7 +157,11 @@ def bfs_updated(tree, start, item_to_find=None):
 
     # Add item to starting directory if not found 
     if found==False and item_to_find!= None:
+
+        # Add the item to find to the list of items in the home directory
         tree[start].append(item_to_find)
+
+        # Add the item to find to the dictionary representation of the file structure
         tree[item_to_find]=[]
 
     return pdf_count
