@@ -160,7 +160,9 @@ def main(args):
     all_results = []
 
     # Test different values of n
-    for n in [10000, 5000, 1000]:
+    # for n in [10000, 5000, 1000]:
+    # for n in [1000, 500, 100]:
+    for n in [5000, 1000, 500]:
         print(f'Testing {n} observations...')
 
         # Downsample data to correct size n
@@ -177,38 +179,74 @@ def main(args):
             big_O_space = n
 
         # Measure execution time  
-        time_measurements = [measure_time(algorithm, 
-                                          data_formatted, 
-                                          observation) for observation in new_observations]
+        time_measured = [measure_time(algorithm, 
+                                      data_formatted, 
+                                      observation) 
+                                      for observation in new_observations]
         
-        average_time_measured = sum(time_measurements)/len(time_measurements)
+        time_measured_average = sum(time_measured)/len(time_measured)
 
-        normalised_average_time_measured = average_time_measured/big_O_time
+        seconds_per_operation = time_measured_average/big_O_time
+        # seconds_per_operation = big_O_time/time_measured_average
 
         # Measure peak memory usage
-        space_measurements = [measure_space(algorithm, 
-                                            data_formatted, 
-                                            observation) for observation in new_observations]
+        space_measured = [measure_space(algorithm, 
+                                        data_formatted, 
+                                        observation) 
+                                        for observation in new_observations]
         
-        average_space_measured = sum(space_measurements)/len(space_measurements)
+        space_measured_average = sum(space_measured)/len(space_measured)
 
-        normalised_average_space_measured = average_space_measured/big_O_space
+        KB_per_memory = space_measured_average/big_O_space
 
         # Save value of n to results
-        results = [n, big_O_time, normalised_average_time_measured]
-        results = [n, big_O_time, average_time_measured, big_O_space, average_space_measured]
-        results = [n, big_O_time, normalised_average_time_measured, big_O_space, normalised_average_space_measured]
+        # results = [n, big_O_time, average_time_measured, normalised_average_time_measured, 
+        #            big_O_space, average_space_measured, normalised_average_space_measured]
+        results = { 'n': n,
+                    'operations': big_O_time,
+                    'time (seconds)': time_measured_average,
+                    'seconds/operation': seconds_per_operation,
+                    'data': big_O_space,
+                    'memory (KB)': space_measured_average,
+                    'KB/data': KB_per_memory
+                    }
+        
         all_results.append(results)
-    
-    results_headings = ['n', 'big_O_time', 'time_measured', 'big_O_space', 'memory_measured']
-    
+
     algorithm = 'knn_A' if '--knn_A' in args else 'knn_B'
 
     with open(f'output_data_{algorithm}.csv', 'w', newline = '') as file:
         
         writer = csv.writer(file)
-        writer.writerow(results_headings)      
-        writer.writerows(all_results)
+        writer.writerow(all_results[0].keys())
+
+        for result in all_results:
+            writer.writerow(result.values())
+
+    # Engineering suitability
+    print()
+    print(f"----------{algorithm}: configurations that meet engineering constraints---------------")
+
+    # Configurations that meet engineering contraints with ...
+    meets_constraints = {3 : [],        # 3 sensors
+                         10: [],        # 10 sensors                                   
+                         100: [],       # 100 sensors
+                         1000: []       # 1000 sensors
+                         }
+
+    for result in all_results:
+        for number_of_sensors in meets_constraints:
+
+            # Estimate time to run algorithm at current number of sensors
+            estimated_time = number_of_sensors * result['time (seconds)'] / 3
+
+            # Store if engineering constraints are met 
+            if estimated_time <= 0.01 and result['memory (KB)'] <= 32:
+                meets_constraints[number_of_sensors].append(f"{result['n']} observations")
+
+    for i,j in meets_constraints.items():
+        print(f'Number of sensors: {i}, {j}' )
+
 
 
 if __name__ == '__main__':
