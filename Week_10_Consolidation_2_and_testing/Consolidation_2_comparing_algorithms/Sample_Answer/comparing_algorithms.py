@@ -55,8 +55,16 @@ def knn_A(training_data, new_observation, k=5):
     for distance, label in nearest:
         votes[label] = votes.get(label, 0) + 1
 
+    # Find the most common label amongst the nearest neighbours
+    # Initialise most common label as first in dictionary
+    most_common_label = list(votes.keys())[0]
+
     # Return the most common label
-    return max(votes, key=votes.get)
+    for label in votes:
+        if votes[label] > votes[most_common_label]:
+            most_common_label = label
+
+    return most_common_label
 
 
 def knn_B(training_data, new_observation, k=5):
@@ -88,8 +96,16 @@ def knn_B(training_data, new_observation, k=5):
         label = distances[i][1]
         votes[label] = votes.get(label, 0) + 1
 
+    # Find the most common label amongst the nearest neighbours
+    # Initialise most common label as first in dictionary
+    most_common_label = list(votes.keys())[0]
+
     # Return the most common label
-    return max(votes, key=votes.get)
+    for label in votes:
+        if votes[label] > votes[most_common_label]:
+            most_common_label = label
+
+    return most_common_label
 
 def generate_random_observation(training_data):
     all_values = []
