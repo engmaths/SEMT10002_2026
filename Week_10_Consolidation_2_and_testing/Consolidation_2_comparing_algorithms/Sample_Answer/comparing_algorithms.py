@@ -85,7 +85,7 @@ def knn_B(training_data, new_observation, k=5):
 
     # Sort all distances using bubble sort
     n = len(distances)
-    for i in range(n):
+    for i in range(n-1):
         for j in range(0, n-i-1):
             if distances[j][0] > distances[j+1][0]:
                 distances[j], distances[j+1] = distances[j+1], distances[j]
