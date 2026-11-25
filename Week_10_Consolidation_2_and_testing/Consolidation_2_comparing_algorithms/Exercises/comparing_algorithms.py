@@ -139,6 +139,7 @@ if __name__ == '__main__':
     #The code below will run the knn_A and knn_B functions to classify the example new observation
     #Delete/comment out these line and run the main function instead 
     new_observation = generate_random_observation(sample_data)
+    print(new_observation)
     print(knn_A(sample_data, new_observation, 3))
     print(knn_B(sample_data, new_observation, 3))
 
